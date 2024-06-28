@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict
-from playwright.async_api import Page, Browser, BrowserContext, async_playwright
+from playwright.async_api import Page, BrowserContext, async_playwright
 from dataclasses import dataclass
 from tuuid import tuuid
 from discord import File

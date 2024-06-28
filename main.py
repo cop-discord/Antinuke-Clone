@@ -1,4 +1,4 @@
-from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or
+from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401
 from discord import Embed, Message, Guild
 import config
 import traceback
@@ -6,7 +6,7 @@ import asyncio
 from pathlib import Path
 from loguru import logger
 from sys import stdout
-from tools import ratelimit, lock
+from tools import ratelimit, lock  # noqa: F401
 from backend.database import Database
 from backend.browser import Session
 
@@ -42,6 +42,8 @@ class Antinuke(Bot):
 
     async def process_commands(self: "Antinuke", message: Message):
         if not message.guild:
+            return
+        if message.author.bot:
             return
 
         check = await self.db.fetchrow(
