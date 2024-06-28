@@ -1,5 +1,5 @@
 from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or
-from discord import Member, User, Embed, Message, Guild
+from discord import Embed, Message, Guild
 import config
 import traceback
 import asyncio
@@ -8,6 +8,7 @@ from loguru import logger
 from sys import stdout
 from tools import ratelimit, lock
 from backend.database import Database
+from backend.browser import Session
 
 async def success(self: Context, message: str) -> Message:
     return await self.send(embed = Embed(color = self.bot.color, description = message))
@@ -31,6 +32,7 @@ class Antinuke(Bot):
     def __init__(self, **kwargs):
         self.color = 0x000001
         self.config = config
+        self.browser = Session()
         self.db = Database(self.config.uri)
         super().__init__(**kwargs)
 
@@ -107,7 +109,14 @@ class Antinuke(Bot):
 
     async def setup_hook(self: "Antinuke"):
         await self.db.connect()
+        await self.browser.launch()
         await self.load_cogs()
+
+
+    async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
+        if isinstance(error, MissingPermissions):
+            return await ctx.fail(f"missing ")
+
 
     
 
