@@ -34,7 +34,7 @@ class Antinuke(Bot):
         self.browser = Session()
         self.db = Database(self.config.uri)
         super().__init__(**kwargs)
-        activity = discord.CustomActivity(name="/pictures for support")
+        activity = discord.CustomActivity(name="Antiduke ready ti nuke")
 
     async def on_guild_join(self: "Antinuke", guild: Guild) -> None:
         if channel := self.get_channel(self.config.channel):
