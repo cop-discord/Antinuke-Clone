@@ -90,10 +90,10 @@ class Information(Cog):
                 value="> [ ] = optional, <> = required\n> Important commands have slash versions",
             )
             .set_thumbnail(url=ctx.bot.user.display_avatar)
-            .set_footer(text=f"Page 1 / {cog_count+1} ({sum(1 for _ in ctx.bot.walk_commands())} commands)")
+            .set_footer(text=f"server: {ctx.guild.name}")
         )
-
-        embeds = {cog.qualified_name:
+        embeds = {"back": embed}
+        embeds.update({cog.qualified_name:
             (
                 Embed(
                     color=self.bot.color,
@@ -101,13 +101,13 @@ class Information(Cog):
                     description=f"```{', '.join(cmd.name + ('*' if isinstance(cmd, Group) else '') for cmd in cog.get_commands())}```",
                 )
                 .set_author(
-                    name=f"{ctx.bot.user.name.title()} Command Menu", 
-                    icon_url=ctx.bot.user.display_avatar
+                    name=f"{str(ctx.author)}", 
+                    icon_url=ctx.author.display_avatar
                 )
-                .set_footer(text=f"Page {index} / {cog_count+1}  ({sum(1 for _ in cog.walk_commands())} commands)")
+                .set_footer(text=f"server: {ctx.guild.name}")
             )
             for index, cog in enumerate(cogs, start=2)
-        }        
+        })
         dropdown = Help(self.bot, ctx.author, embeds)
         view.add_item(dropdown)
         return await ctx.send(embed = embed, view = view)

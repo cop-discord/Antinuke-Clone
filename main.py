@@ -1,10 +1,12 @@
 from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401
 from discord import Embed, Message, Guild, Intents, User
 import config
+from discord.ext import commands
 import traceback, asyncio, discord
 from pathlib import Path
 from loguru import logger
 from sys import stdout
+from typing import Optional
 from tools import ratelimit, lock  # noqa: F401
 from backend.database import Database
 from backend.browser import Session
@@ -43,8 +45,9 @@ class Antinuke(Bot):
         kwargs["command_prefix"] = self.get_prefix
         kwargs["auto_update"] = False
         kwargs["anti_cloudflare_ban"] = True
+        kwargs["activity"] = discord.CustomActivity(name="Antiduke ready to nuke")
         super().__init__(**kwargs)
-        activity = discord.CustomActivity(name="Antiduke ready to nuke")
+
 
     async def on_guild_join(self: "Antinuke", guild: Guild) -> None:
         if channel := self.get_channel(self.config.CHANNEL):
@@ -134,19 +137,29 @@ class Antinuke(Bot):
         for table in tables:
             try:
                 await self.db.execute(f"{table};")
-            except:
+            except Exception:
                 pass
         try:
-            await self.browser.launch()
-        except:
+            await self.browser.launch() #rare case that playwright isn't initializing cuz who tf cares
+        except Exception:
             pass
         await self.load_cogs()
         await self.load_extension("jishaku")
 
+    @ratelimit("rl:error_message:{ctx.guild.id}", 1, 5)
+    async def error_message(self: "Antinuke", ctx: Context, message: str) -> Optional[Message]:
+        return await ctx.fail(message)
+
 
     async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
-        if isinstance(error, MissingPermissions):
-            return await ctx.fail(f"missing permissions")
+        if isinstance(error, commands.NoCommandFound):
+            return
+        elif isinstance(error, commands.MissingRequiredArgument):
+            return await ctx.send_help()
+        elif isinstance(error, commands.MissingPermissions):
+            return await self.error_message(ctx, f"You're **missing** the `{', '.join(error.missing_permissions)}` permission")
+        elif isinstance(error, commands.BotMissingPermissions):
+            return await self.error_message(ctx, f"I'm **missing** the `{', '.join(error.missing_permissions)}` permission")
         tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
         logger.info(f"{ctx.command.qualified_name} raised {tb}")
         
