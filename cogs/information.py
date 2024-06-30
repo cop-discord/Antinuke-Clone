@@ -9,7 +9,7 @@ class Help(Select):
         self._options = options
         self.author = author
         options = [
-            SelectOption(label = _, description = f"{_} cmds") for _ in options
+            SelectOption(label = _, description = f"{_} cmds" if _.lower() != "back" else "back to home") for _ in options
         ]
         super().__init__(custom_id = "help", placeholder="commands", min_values=1, max_values=1, options=options)
 
