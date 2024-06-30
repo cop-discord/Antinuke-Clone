@@ -2,6 +2,7 @@
 from discord import User, Member, Embed, PermissionOverwrite
 from discord.ext.commands import command, Context, Cog, Group
 from backend import BOT, SELF, USER
+from backend.links import linky
 
 class Moderation(Cog):
     def __init__(self: SELF, bot: BOT):
@@ -11,6 +12,13 @@ class Moderation(Cog):
     async def clear(self: SELF, ctx: Context):
         return
 #        return await ctx.pages() # you do the fucking pages nigger
+
+    @clear.command(name="links", aliases=["link"], description="clear all links from chat")
+    async def links(self: SELF, ctx: Context, limit: int):
+        if limit > 100:
+            await ctx.fail("you can only delete 100 messages at a time")
+            return
+        await ctx.channel.purge(limit=limit, check=lambda m: linky(m.content), reason=f"purged by {ctx.author}")
 
     @clear.command(name="invites", aliases=["invite"], description="clear all discord invites")
     async def invites(self: SELF, ctx: Context, limit: int):
