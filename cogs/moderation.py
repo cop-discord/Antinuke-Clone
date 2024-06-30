@@ -1,6 +1,6 @@
 
 from discord import User, Member, Embed, PermissionOverwrite
-from discord.ext.commands import command, Context, Cog, Group
+from discord.ext.commands import command, Context, Cog, Group, group, has_permissions
 from backend import BOT, SELF, USER
 from backend.links import linky
 
