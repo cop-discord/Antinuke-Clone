@@ -147,6 +147,8 @@ class Antinuke(Bot):
     async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
         if isinstance(error, MissingPermissions):
             return await ctx.fail(f"missing permissions")
+        tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+        logger.info(f"{ctx.command.qualified_name} raised {tb}")
         
 bot = Antinuke(intents = Intents().all(), help_command = None, owner_ids = [352190010998390796, 153643814605553665])
 if __name__ == "__main__":

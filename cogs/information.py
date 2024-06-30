@@ -17,7 +17,8 @@ class Help(Select):
         if interaction.user != self.author:
             return await interaction.response.send_message("you aren't the author of this command", ephemeral = True)
         value = self.values[0]
-        return await interaction.message.edit(embed = self._options[value])
+        await interaction.message.edit(embed = self._options[value])
+        return await interaction.response.defer()
 
 
 
@@ -92,7 +93,7 @@ class Information(Cog):
             .set_footer(text=f"Page 1 / {cog_count+1} ({sum(1 for _ in ctx.bot.walk_commands())} commands)")
         )
 
-        embeds = {cog.name:
+        embeds = {cog.qualified_name:
             (
                 Embed(
                     color=self.bot.color,
