@@ -1,11 +1,11 @@
 from discord import Member, User, Embed, utils
 import json
-from discord.ext.commands import group, Context, Cog, AutoShardedBot, Bot
-from typing import Optional
+from discord.ext.commands import group, Context, Cog, AutoShardedBot, Bot  # noqa: F401
+from backend import SELF, BOT, USER
 from loguru import logger
 
 class Profile(Cog):
-    def __init__(self, bot: Bot):
+    def __init__(self: SELF, bot: BOT):
         self.bot = bot
         self.emoji_map = {
             "instagram": "[IG]",
@@ -14,7 +14,7 @@ class Profile(Cog):
             "pinterest": "[PIN]"
         }
 
-    def format_url(self, kind: str, username: str) -> str:
+    def format_url(self: SELF, kind: str, username: str) -> str:
         if kind.lower() == "tiktok":
             return f"https://tiktok.com/@{username}"
         elif kind.lower() == "instagram":
@@ -25,7 +25,7 @@ class Profile(Cog):
             return f"https://pinterest.com/{username}"
 
     @group(name = "profile", aliases = ("aboutme",), brief = "show information regarding yourself", invoke_without_command = True)
-    async def profile(self, ctx: Context, *, member: Optional[Member] = None):
+    async def profile(self: SELF, ctx: Context, *, member: USER):
         if not member:
             member = ctx.author
 
@@ -70,7 +70,7 @@ class Profile(Cog):
         return await ctx.send(embed = embed)
     
     @profile.command(name = "set", brief = "setup your profile", usage = ",profile set {variable} {value}", example = ",profile set instagram terrorist")
-    async def profile_set(self, ctx: Context, variable: str, *, username: str):
+    async def profile_set(self: SELF, ctx: Context, variable: str, *, username: str):
         data = await self.bot.db.fetchrow("""SELECT * FROM profile WHERE user_id = $1""", ctx.author.id)
         if variable.lower() in ["bio", "biography", "desc", "description", "aboutme", "abtme", "abme"]:
             kwargs = ("description", username, ctx.author.id)
@@ -108,7 +108,7 @@ class Profile(Cog):
         return await ctx.success(f"successfully set your **{kwargs[0]}** as `{username}`")
     
     @profile.command(name = "friend", brief = "add or remove a user as a friend", usage = ",profile friend {user}", example = ",profile friend aiohttp")
-    async def profile_friend(self, ctx: Context, *, user: User | Member):
+    async def profile_friend(self: SELF, ctx: Context, *, user: User | Member):
         data = await self.bot.db.fetchval("""SELECT friends FROM profile WHERE user_id = $1""", ctx.author.id)
         if data:
             friends = json.loads(data)
