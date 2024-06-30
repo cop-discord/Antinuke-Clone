@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from discord import Member, User, Embed, utils
 from discord.ext.commands import group, Context, Cog, AutoShardedBot, Bot, Author, command
 from datetime import datetime
@@ -27,23 +26,5 @@ class utility(Cog):
         embed.set_footer(text=f"mutual guilds: {len(mutual_guilds)}")
         embed.set_author(name=str(user.id), icon_url=user.avatar.url)
         await ctx.send(embed=embed)
-=======
-from discord import User, Member, Embed, PermissionOverwrite
-from discord.ext.commands import command, Context, Cog
-from backend import BOT, SELF, USER
-from backend.listeners import listeners
-
-class Utility(Cog):
-    def __init__(self: SELF, bot: BOT):
-        self.bot = bot
-
-    @command(name = "afk", aliases=["away", "zzz"], description = "go away from discord")
-    async def afk(self: SELF, ctx: Context, *, reason: str = None):
-        reason = reason if reason else "AFK"
-        await self.bot.db.execute("INSERT INTO afk (user_id, reason) VALUES ($1, $2)", ctx.author.id, reason)
-        await ctx.success(f"{ctx.author.mention} you're now afk with reason: **{reason}**")
->>>>>>> 50831cbdcf4914dd7554f1b201f65c9885459a9c
-
 async def setup(bot: BOT):
     await bot.add_cog(Utility(bot))
-    await bot.add_cog(listeners(bot))
