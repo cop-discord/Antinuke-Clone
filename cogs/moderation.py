@@ -35,7 +35,7 @@ class Moderation(Cog):
         if limit > 100:
             await ctx.fail("you can only delete 100 messages at a time")
             return
-        await ctx.channel.purge(limit=limit, check=lambda m: word in m.content, reason=f"the messages containing the word'{word}' was purged by {ctx.author}")
+        await ctx.channel.purge(limit=limit, check=lambda m: word in m.content, reason=f"the messages containing the word '{word}' was purged by {ctx.author}")
         
     @clear.command(name="images", aliases=["image"], description="clear images from chat")
     async def images(self: SELF, ctx: Context, limit: int):
