@@ -26,12 +26,12 @@ class Information(Cog):
             return await ctx.fail(f"{ctx.author.mention}, **{user.name}** doesn't have a banner.")
         embed = Embed(color = self.bot.color, title = f"{user.name}'s avatar", url = f"https://discord.com/users/{user.id}")
         embed.set_author(name = str(ctx.author), icon_url = ctx.author.display_avatar.url)
-        embed.set_image(url = user..url)
+        embed.set_image(url = user.banner.url)
         embed.set_footer(text = f"server: {str(ctx.guild.name)}, ,avatar (user id)")
         view = View()
-        view.add_item(Button(label = "PNG", url = user.display_avatar.with_format("PNG").url))
-        view.add_item(Button(label = "WEBP", url = user.display_avatar.with_format("WEBP").url))
-        view.add_item(Button(label = "JPG", url = user.display_avatar.with_format("JPG").url))
+        view.add_item(Button(label = "PNG", url = user.banner.with_format("PNG").url))
+        view.add_item(Button(label = "WEBP", url = user.banner.with_format("WEBP").url))
+        view.add_item(Button(label = "JPG", url = user.banner.with_format("JPG").url))
         return await ctx.send(embed = embed, view = view)
     
 async def setup(bot: BOT):
