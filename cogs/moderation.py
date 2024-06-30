@@ -50,7 +50,7 @@ class Moderation(Cog):
             await channel.set_permissions(user, add_reactions=False)
         await ctx.success(f"{user.mention} has been revoked from adding reactions anywhere")
 
-    @command(name="rmute", aliases=["ru"], description="unreaction mute a discordian")
+    @command(name="runmute", aliases=["ru"], description="unreaction mute a discordian")
     @has_permissions(manage_messages=True)
     async def runmute(self: SELF, ctx: Context, user: USER):
         for channel in ctx.guild.channels:
