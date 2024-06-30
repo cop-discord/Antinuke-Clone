@@ -7,7 +7,7 @@ class Information(Cog):
     def __init__(self: SELF, bot: BOT):
         self.bot = bot
 
-    @command(name = "avatar", description = "get the avatar of a user or member")
+    @command(name = "avatar", aliases=["av", "pfp"], description = "get the avatar of a user or member")
     async def avatar(self: SELF, ctx: Context, *, user: USER):
         embed = Embed(color = self.bot.color, title = f"{user.name}'s avatar", url = f"https://discord.com/users/{user.id}")
         embed.set_author(name = str(ctx.author), icon_url = ctx.author.display_avatar.url)
@@ -34,7 +34,7 @@ class Information(Cog):
         view.add_item(Button(label = "JPG", url = user.banner.with_format("JPG").url))
         return await ctx.send(embed = embed, view = view)
 
-    @command(name = "userinfo", description = "fetch basic information on a given userid or username")
+    @command(name = "userinfo", aliases=["ui", "user"], description = "fetch basic information on a given userid or username")
     async def userinfo(self, ctx: Context, *, user: User = None):
         if user is None:
             if ctx.message.mentions:
