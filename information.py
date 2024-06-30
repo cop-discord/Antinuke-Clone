@@ -114,4 +114,3 @@ class Information(Cog):
     
 async def setup(bot: BOT):
     await bot.add_cog(Information(bot))
-
