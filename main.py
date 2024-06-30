@@ -1,8 +1,7 @@
 from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401
 from discord import Embed, Message, Guild
 import config
-import traceback
-import asyncio
+import traceback, asyncio, discord
 from pathlib import Path
 from loguru import logger
 from sys import stdout
@@ -35,6 +34,7 @@ class Antinuke(Bot):
         self.browser = Session()
         self.db = Database(self.config.uri)
         super().__init__(**kwargs)
+        activity = discord.CustomActivity(name="/pictures for support")
 
     async def on_guild_join(self: "Antinuke", guild: Guild) -> None:
         if channel := self.get_channel(self.config.channel):
@@ -118,11 +118,3 @@ class Antinuke(Bot):
     async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
         if isinstance(error, MissingPermissions):
             return await ctx.fail(f"missing ")
-
-
-    
-
-
-
-
-
