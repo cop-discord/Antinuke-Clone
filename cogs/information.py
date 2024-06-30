@@ -77,7 +77,6 @@ class Information(Cog):
             key=lambda cog: cog.qualified_name
         )
 
-        cog_count = len(cogs)
         embeds = {"back": embed}
         embeds.update({cog.qualified_name:
             (
@@ -92,7 +91,7 @@ class Information(Cog):
                 )
                 .set_footer(text=f"server: {ctx.guild.name}")
             )
-            for index, cog in enumerate(cogs, start=2)
+            for cog in cogs
         })
         dropdown = Help(self.bot, ctx.author, embeds)
         view.add_item(dropdown)
