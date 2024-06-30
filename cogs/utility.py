@@ -1,5 +1,5 @@
 from discord import User, Member, Embed
-from discord.ext.commands import command, group, Context, Cog
+from discord.ext.commands import command, Context, Cog
 from backend import BOT, SELF, USER
 
 class utility(Cog):
