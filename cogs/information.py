@@ -24,7 +24,7 @@ class Information(Cog):
         user = await self.bot.fetch_user(user.id)
         if not user.banner:
             return await ctx.fail(f"{ctx.author.mention}, **{user.name}** doesn't have a banner.")
-        embed = Embed(color = self.bot.color, title = f"{user.name}'s avatar", url = f"https://discord.com/users/{user.id}")
+        embed = Embed(color = self.bot.color, title = f"{user.name}'s banner", url = f"https://discord.com/users/{user.id}")
         embed.set_author(name = str(ctx.author), icon_url = ctx.author.display_avatar.url)
         embed.set_image(url = user.banner.url)
         embed.set_footer(text = f"server: {str(ctx.guild.name)}, ,avatar (user id)")
