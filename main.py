@@ -8,6 +8,10 @@ from sys import stdout
 from tools import ratelimit, lock  # noqa: F401
 from backend.database import Database
 from backend.browser import Session
+import os
+
+os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
+os.environ["JISHAKU_RETAIN"] = "True"
 
 async def success(self: Context, message: str) -> Message:
     return await self.send(embed = Embed(color = self.bot.color, description = message))
