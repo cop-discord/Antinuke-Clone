@@ -33,9 +33,9 @@ class Information(Cog):
         embed.set_image(url = user.display_avatar.url)
         embed.set_footer(text = f"server: {str(ctx.guild.name)}, ,avatar (user id)")
         view = View()
-        view.add_item(Button(label = "PNG", url = user.display_avatar.with_format("PNG").url))
-        view.add_item(Button(label = "WEBP", url = user.display_avatar.with_format("WEBP").url))
-        view.add_item(Button(label = "JPG", url = user.display_avatar.with_format("JPG").url))
+        view.add_item(Button(label = "PNG", url = user.display_avatar.with_format("png").url))
+        view.add_item(Button(label = "WEBP", url = user.display_avatar.with_format("webp").url))
+        view.add_item(Button(label = "JPG", url = user.display_avatar.with_format("jpg").url))
         return await ctx.send(embed = embed, view = view)
     
     @command(name = "banner", description = "get the banner of a user or member")
@@ -51,9 +51,9 @@ class Information(Cog):
             kwargs["icon_url"] = ctx.guild.icon.url
         embed.set_footer(**kwargs)
         view = View()
-        view.add_item(Button(label = "PNG", url = user.banner.with_format("PNG").url))
-        view.add_item(Button(label = "WEBP", url = user.banner.with_format("WEBP").url))
-        view.add_item(Button(label = "JPG", url = user.banner.with_format("JPG").url))
+        view.add_item(Button(label = "PNG", url = user.banner.with_format("png").url))
+        view.add_item(Button(label = "WEBP", url = user.banner.with_format("webp").url))
+        view.add_item(Button(label = "JPG", url = user.banner.with_format("jpg").url))
         return await ctx.send(embed = embed, view = view)
     
     @command(name = "help", description = "get the command list")
