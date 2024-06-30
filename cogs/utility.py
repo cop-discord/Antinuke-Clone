@@ -1,13 +1,14 @@
 from discord import Member, User, Embed, utils
-from discord.ext.commands import group, Context, Cog, AutoShardedBot, Bot
+from discord.ext.commands import group, Context, Cog, AutoShardedBot, Bot, Author, command
 from datetime import datetime
+from backend import SELF, BOT, USER
 
 class utility(Cog):
-    def __init__(self, bot: Bot):
+    def __init__(self: SELF, bot: BOT):
         self.bot = bot
 
-	  @commands.command(name="userinfo", aliases=["ui", "user"], description="fetch basic info from a given user id or username")
-    async def userinfo(self, ctx: Context, *, user: User = None):
+    @command(name="userinfo", aliases=["ui", "user"], description="fetch basic info from a given user id or username")
+    async def userinfo(self, ctx: Context, *, user: USER = Author):
         if user is None:
             if ctx.message.mentions:
                 user = ctx.message.mentions[0]

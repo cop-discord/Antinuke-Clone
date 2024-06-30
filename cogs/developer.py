@@ -14,7 +14,7 @@ class Developer(Cog):
             return True
         
     @command(name = "blacklist", description = "blacklist a user, channel, or guild", aliases = ("bl",))
-    async def blacklist(self: SELF, ctx: Context, *, object_: Union[Member, User, Guild, TextChannel])
+    async def blacklist(self: SELF, ctx: Context, *, object_: Union[Member, User, Guild, TextChannel]):
         object_type = str(type(object_)).split(".")[1].replace("member", "user")
         await self.bot.db.execute("""INSERT INTO blacklist (object_id, object_type) VALUES($1, $2) ON CONFLICT(object_id, object_type) DO NOTHING""", object_.id, object_type)
         return await ctx.success(f"successfully **blacklisted** {object_.mention if isinstance(object_, (Member, User)) else object_.id}")

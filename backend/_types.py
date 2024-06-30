@@ -5,4 +5,4 @@ from typing_extensions import Self
 
 SELF = Self
 BOT = Union[Bot, AutoShardedBot]
-USER = Optional[Union[Member, User]] = Author
+USER = Optional[Union[Member, User]]

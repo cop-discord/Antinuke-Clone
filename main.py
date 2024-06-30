@@ -1,5 +1,5 @@
 from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401
-from discord import Embed, Message, Guild
+from discord import Embed, Message, Guild, Intents, User
 import config
 import traceback
 import asyncio
@@ -34,10 +34,13 @@ class Antinuke(Bot):
         self.config = config
         self.browser = Session()
         self.db = Database(self.config.uri)
+        kwargs["command_prefix"] = self.get_prefix
+        kwargs["auto_update"] = False
+        kwargs["anti_cloudflare_ban"] = True
         super().__init__(**kwargs)
 
     async def on_guild_join(self: "Antinuke", guild: Guild) -> None:
-        if channel := self.get_channel(self.config.channel):
+        if channel := self.get_channel(self.config.CHANNEL):
             await channel.send(embed = Embed(color = self.color, description = f"Joined **{guild.name}**\n**Members:** {len(guild.members)}\n**Owner:** {str(guild.owner)}\n**ID:** {guild.id}"))
 
     async def process_commands(self: "Antinuke", message: Message):
@@ -48,7 +51,7 @@ class Antinuke(Bot):
 
         check = await self.db.fetchrow(
             """
-            SELECT * FROM blacklisted 
+            SELECT * FROM blacklist 
             WHERE (object_id = $1 AND object_type = $2) 
             OR (object_id = $3 AND object_type = $4)
         """,
@@ -64,6 +67,13 @@ class Antinuke(Bot):
             return
 
         return await super().process_commands(message)
+    
+    async def is_owner(self, user: User):
+        if user.id in self.owner_ids:  # Implement your own conditions here
+            return True
+
+        # Else fall back to the original
+        return await super().is_owner(user)
     
     async def get_prefix(self: "Antinuke", message: Message):
         server = await self.db.fetchval(
@@ -85,9 +95,9 @@ class Antinuke(Bot):
             WHERE guild_id = $1""",
             message.guild.id,
         ) or ","
-        @ratelimit(1, 5)
+        @ratelimit("prefix_message:{message.guild.id}", 1, 5)
         async def prefix_message(message: Message, prefix: str = ","):
-            return await message.channel.send(embed = Embed(color = self.bot.color, description = f"My current prefix is `{prefix}`"))
+            return await message.channel.send(embed = Embed(color = self.color, description = f"My current prefix is `{prefix}`"))
         if message.mentions_bot(strict = True):
             return await prefix_message(message, prefix)
         await self.process_commands(message)
@@ -106,18 +116,35 @@ class Antinuke(Bot):
             f'cogs.{str(c).split("/")[-1].split(".")[0]}'
             for c in Path("cogs/").glob("*.py")
         ]
-        await asyncio.gather(*[self.__load(c) for c in cogs])
+        logger.info(cogs)
+        await asyncio.gather(*[self.load_cog(c.replace("cogs\\", "")) for c in cogs])
 
 
     async def setup_hook(self: "Antinuke"):
         await self.db.connect()
-        await self.browser.launch()
+        with open("install/schema.sql", "r") as file:
+            tables = file.read().split(";")
+        for table in tables:
+            try:
+                await self.db.execute(f"{table};")
+            except:
+                pass
+        try:
+            await self.browser.launch()
+        except:
+            pass
         await self.load_cogs()
+        await self.load_extension("jishaku")
 
 
     async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
         if isinstance(error, MissingPermissions):
-            return await ctx.fail(f"missing ")
+            return await ctx.fail(f"missing permissions")
+        
+bot = Antinuke(intents = Intents().all(), help_command = None, owner_ids = [352190010998390796, 153643814605553665])
+if __name__ == "__main__":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    asyncio.run(bot.run("MTI1NzAxNTY1MDg1Mzk3ODE0NA.GKqbq9.ExufQ5SLQoaOm1ku4EqLtaS6OQjWh9ybRiVsHQ"))
 
 
     

@@ -51,7 +51,7 @@ class Database:
 
     async def create(self) -> Pool:
         pool: Pool = await create_pool(
-            dsn=self.uri, init=self.settings, record_class=Record
+            user = "postgres.vothbutfvvjkjxlcvwwo", password = "fuckyou123$$!$!$$!$!$!@", host= "aws-0-us-east-1.pooler.supabase.com", port = 5432, database = "postgres", init=self.settings, record_class=Record
         )
         log.info(f"Initialized database connection {pool.__hash__()}")
         return pool
