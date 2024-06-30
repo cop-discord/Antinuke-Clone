@@ -9,6 +9,7 @@ class Moderation(Cog):
         self.bot = bot
         
     @group(name="clear", invoke_without_command=True)
+    @has_permissions(manage_messages=True)
     async def clear(self: SELF, ctx: Context):
         return
 #        return await ctx.pages() # you do the fucking pages nigger
@@ -43,12 +44,14 @@ class Moderation(Cog):
         await ctx.channel.purge(limit=limit, check=lambda m: m.attachments, reason=f"purged by {ctx.author}")
 
     @command(name="rmute", aliases=["rm"], description="remove permissions to add reaction in all channels")
+    @has_permissions(manage_reactions=True)
     async def rmute(self: SELF, ctx: Context, user: USER):
         for channel in ctx.guild.channels:
             await channel.set_permissions(user, add_reactions=False)
         await ctx.success(f"{user.mention} has been revoked from adding reactions anywhere")
 
     @command(name="rmute", aliases=["ru"], description="unreaction mute a discordian")
+    @has_permissions(manage_reactions=True)
     async def runmute(self: SELF, ctx: Context, user: USER):
         for channel in ctx.guild.channels:
             await channel.set_permissions(user, overwrite=None)
