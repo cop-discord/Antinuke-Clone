@@ -148,7 +148,7 @@ class Antinuke(Bot):
 bot = Antinuke(intents = Intents().all(), help_command = None, owner_ids = [352190010998390796, 153643814605553665])
 if __name__ == "__main__":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.run(bot.run())
+    asyncio.run(bot.run(config.TOKEN))
 
 
     

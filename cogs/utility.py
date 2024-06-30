@@ -27,4 +27,4 @@ class utility(Cog):
         embed.set_author(name=str(user.id), icon_url=user.avatar.url)
         await ctx.send(embed=embed)
 async def setup(bot: BOT):
-    await bot.add_cog(Utility(bot))
+    await bot.add_cog(utility(bot))
