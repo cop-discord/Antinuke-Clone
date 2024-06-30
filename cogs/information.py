@@ -78,20 +78,6 @@ class Information(Cog):
         )
 
         cog_count = len(cogs)
-
-        embed = (
-            Embed(color=self.bot.color)
-            .set_author(
-                name=f"{ctx.bot.user.name.title()} Command Menu", 
-                icon_url=ctx.bot.user.display_avatar
-            )
-            .add_field(
-                name=" Need to Know",
-                value="> [ ] = optional, <> = required\n> Important commands have slash versions",
-            )
-            .set_thumbnail(url=ctx.bot.user.display_avatar)
-            .set_footer(text=f"server: {ctx.guild.name}")
-        )
         embeds = {"back": embed}
         embeds.update({cog.qualified_name:
             (
