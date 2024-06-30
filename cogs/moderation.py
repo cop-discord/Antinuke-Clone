@@ -1,11 +1,37 @@
 
 from discord import User, Member, Embed, PermissionOverwrite
-from discord.ext.commands import command, Context, Cog
+from discord.ext.commands import command, Context, Cog, Group
 from backend import BOT, SELF, USER
 
 class Moderation(Cog):
     def __init__(self: SELF, bot: BOT):
         self.bot = bot
+        
+    @group(name="clear", invoke_without_command=True)
+    async def clear(self: SELF, ctx: Context):
+        return await ctx.pages()
+
+    @clear.command(name="invites", aliases=["invite"], description="clear all discord invites")
+    async def invites(self: SELF, ctx: Context, limit: int):
+        if limit > 100:
+            await ctx.fail("you can only delete 100 messages at a time")
+            return
+        regex = r"discord(?:\.com|app\.com|\.gg)/(?:invite/)?([a-zA-Z0-9\-]{2,32})"
+        await ctx.channel.purge(limit=limit, check=lambda m: re.search(regex, m.content), reason=f"purged by {ctx.author}")
+        
+    @clear.command(name="contains", aliases=["has"], description="clear messages containing a specific phrase")
+    async def contains(self: SELF, ctx: Context, limit: int, *, word: str):
+        if limit > 100:
+            await ctx.fail("you can only delete 100 messages at a time")
+            return
+        await ctx.channel.purge(limit=limit, check=lambda m: word in m.content, reason=f"the messages containing the word'{word}' was purged by {ctx.author}")
+        
+    @clear.command(name="images", aliases=["image"], description="clear images from chat")
+    async def images(self: SELF, ctx: Context, limit: int):
+        if limit > 100:
+            await ctx.fail("you can only delete 100 messages at a time")
+            return
+        await ctx.channel.purge(limit=limit, check=lambda m: m.attachments, reason=f"purged by {ctx.author}")
 
     @command(name="rmute", aliases=["rm"], description="remove permissions to add reaction in all channels")
     async def rmute(self: SELF, ctx: Context, user: USER):
