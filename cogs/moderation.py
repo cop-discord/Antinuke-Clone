@@ -9,7 +9,8 @@ class Moderation(Cog):
         
     @group(name="clear", invoke_without_command=True)
     async def clear(self: SELF, ctx: Context):
-        return await ctx.pages()
+        return
+#        return await ctx.pages() # you do the fucking pages nigger
 
     @clear.command(name="invites", aliases=["invite"], description="clear all discord invites")
     async def invites(self: SELF, ctx: Context, limit: int):
