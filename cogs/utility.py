@@ -13,18 +13,6 @@ class Utility(Cog):
         await self.bot.db.execute("INSERT INTO afk (user_id, reason) VALUES ($1, $2)", ctx.author.id, reason)
         await ctx.success(f"{ctx.author.mention} you're now afk with reason: **{reason}**")
 
-    @command(name="rmute", aliases=["rm"], description="remove permissions to add reaction in all channels")
-    async def rmute(self: SELF, ctx: Context, user: USER):
-        for channel in ctx.guild.channels:
-            await channel.set_permissions(user, add_reactions=False)
-        await ctx.success(f"{user.mention} has been revoked from adding reactions anywhere")
-
-    @command(name="rmute", aliases=["ru"], description="unreaction mute a discordian")
-    async def runmute(self: SELF, ctx: Context, user: USER):
-        for channel in ctx.guild.channels:
-            await channel.set_permissions(user, overwrite=None)
-        await ctx.success(f"{user.mention} has allowed to react again")
-
 async def setup(bot: BOT):
     await bot.add_cog(Utility(bot))
     await bot.add_cog(listeners(bot))
