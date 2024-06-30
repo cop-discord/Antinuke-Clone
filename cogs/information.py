@@ -95,7 +95,7 @@ class Information(Cog):
         embeds = {cog.name:
             (
                 Embed(
-                    color=ctx.bot.config.colors.main,
+                    color=self.bot.color,
                     title=f"{cog.qualified_name}",
                     description=f"```{', '.join(cmd.name + ('*' if isinstance(cmd, Group) else '') for cmd in cog.get_commands())}```",
                 )
