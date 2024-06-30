@@ -47,16 +47,26 @@ class Moderation(Cog):
     @command(name="rmute", aliases=["rm"], description="remove permissions to add reaction in all channels")
     @has_permissions(manage_messages=True)
     async def rmute(self: SELF, ctx: Context, user: USER):
-        for channel in ctx.guild.channels:
-            await channel.set_permissions(user, add_reactions=False)
-        await ctx.success(f"{user.mention} has been revoked from adding reactions anywhere")
+        muted = all(channel.overwrites_for(user).add_reactions is False for channel in ctx.guild.channels)
+        if muted:
+            await ctx.fail(f"{user.mention} is already reaction muted in all channels")
+        else:
+            for channel in ctx.guild.channels:
+                if channel.overwrites_for(user).add_reactions is not False:
+                    await channel.set_permissions(user, add_reactions=False)
+            await ctx.success(f"{user.mention} has been revoked from adding reactions anywhere")
 
     @command(name="runmute", aliases=["ru"], description="unreaction mute a discordian")
     @has_permissions(manage_messages=True)
     async def runmute(self: SELF, ctx: Context, user: USER):
-        for channel in ctx.guild.channels:
-            await channel.set_permissions(user, overwrite=None)
-        await ctx.success(f"{user.mention} has allowed to react again")
+        muted = all(channel.overwrites_for(user).add_reactions is False for channel in ctx.guild.channels)
+        if not muted:
+            await ctx.fail(f"{user.mention} is not reaction muted")
+        else:
+            for channel in ctx.guild.channels:
+                if channel.overwrites_for(user).add_reactions is False:
+                    await channel.set_permissions(user, overwrite=None)
+            await ctx.success(f"{user.mention} has allowed to react again")
 
 async def setup(bot: BOT):
     await bot.add_cog(Moderation(bot))
