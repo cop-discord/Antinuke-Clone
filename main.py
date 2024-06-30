@@ -155,7 +155,7 @@ class Antinuke(Bot):
         if isinstance(error, commands.NoCommandFound):
             return
         elif isinstance(error, commands.MissingRequiredArgument):
-            return await ctx.send_help()
+            return await self.send_error(ctx, f"Please include a **{error.param.name.title()}**")
         elif isinstance(error, commands.MissingPermissions):
             return await self.error_message(ctx, f"You're **missing** the `{', '.join(error.missing_permissions)}` permission")
         elif isinstance(error, commands.BotMissingPermissions):
