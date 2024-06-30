@@ -3,6 +3,7 @@ from discord import User, Member, Embed, PermissionOverwrite
 from discord.ext.commands import command, Context, Cog, Group, group, has_permissions
 from backend import BOT, SELF, USER
 from backend.links import linky
+import re
 
 class Moderation(Cog):
     def __init__(self: SELF, bot: BOT):
