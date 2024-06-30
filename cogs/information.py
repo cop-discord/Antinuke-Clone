@@ -25,8 +25,13 @@ class Information(Cog):
     def __init__(self: SELF, bot: BOT):
         self.bot = bot
 
+<<<<<<< HEAD
     @command(name = "avatar", description = "get the avatar of a user or member")
     async def avatar(self: SELF, ctx: Context, *, user: User = Author):
+=======
+    @command(name = "avatar", aliases=["av", "pfp"], description = "get the avatar of a user or member")
+    async def avatar(self: SELF, ctx: Context, *, user: USER):
+>>>>>>> 50831cbdcf4914dd7554f1b201f65c9885459a9c
         embed = Embed(color = self.bot.color, title = f"{user.name}'s avatar", url = f"https://discord.com/users/{user.id}")
         embed.set_author(name = str(ctx.author), icon_url = ctx.author.display_avatar.url)
         embed.set_image(url = user.display_avatar.url)
@@ -54,6 +59,7 @@ class Information(Cog):
         view.add_item(Button(label = "WEBP", url = user.banner.with_format("WEBP").url))
         view.add_item(Button(label = "JPG", url = user.banner.with_format("JPG").url))
         return await ctx.send(embed = embed, view = view)
+<<<<<<< HEAD
     
     @command(name = "help", description = "get the command list")
     async def help(self: SELF, ctx: Context):
@@ -112,6 +118,30 @@ class Information(Cog):
         return await ctx.send(embed = embed, view = view)
 
     
+=======
+
+    @command(name = "userinfo", aliases=["ui", "user"], description = "fetch basic information on a given userid or username")
+    async def userinfo(self: SELF, ctx: Context, *, user: USER = None):
+        if user is None:
+            if ctx.message.mentions:
+                user = ctx.message.mentions[0]
+            else:
+                user = await self.bot.fetch_user(ctx.message.content.split()[-1])
+        mutual_guilds = [guild for guild in self.bot.guilds if guild.get_member(user.id)]
+        embed = Embed(color=self.bot.color)
+        embed.set_thumbnail(url=user.display_avatar.url)
+        embed.add_field(name="Joined Discord", value=f"<t:{int(user.created_at.timestamp())}:f>")
+        if isinstance(user, Member):
+            embed.title = f"{user.display_name} @{user.name}"
+            embed.add_field(name="joined server", value=f"<t:{int(user.joined_at.timestamp())}:f>")
+        else:
+            embed.title = f"{user.name}"
+        embed.set_footer(text=f"mutual guilds: {len(mutual_guilds)}")
+        embed.set_author(name=str(user.id), icon_url=user.display_avatar.url)
+        await ctx.send(embed=embed)
+
+
+>>>>>>> 50831cbdcf4914dd7554f1b201f65c9885459a9c
 async def setup(bot: BOT):
     await bot.add_cog(Information(bot))
 
