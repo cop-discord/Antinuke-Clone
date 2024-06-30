@@ -11,6 +11,9 @@ from backend.browser import Session
 import os
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
+os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
+os.environ["JISHAKU_HIDE"] = "True"
+os.environ["JISHAKU_FORCE_PAGINATOR"] = "True"
 os.environ["JISHAKU_RETAIN"] = "True"
 
 async def success(self: Context, message: str) -> Message:
