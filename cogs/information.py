@@ -35,7 +35,7 @@ class Information(Cog):
         return await ctx.send(embed = embed, view = view)
 
     @command(name = "userinfo", aliases=["ui", "user"], description = "fetch basic information on a given userid or username")
-    async def userinfo(self, ctx: Context, *, user: User = None):
+    async def userinfo(self: SELF, ctx: Context, *, user: USER = None):
         if user is None:
             if ctx.message.mentions:
                 user = ctx.message.mentions[0]
