@@ -58,16 +58,19 @@ class Information(Cog):
     
     @command(name = "help", description = "get the command list")
     async def help(self: SELF, ctx: Context):
-        embed = Embed()
+        embed = Embed(color = self.bot.color)
         view = View()
         embed.set_author(name = str(ctx.author), icon_url = ctx.author.display_avatar.url)
         embed.description = f"used by over **{len(self.bot.users)}** users in **{len(self.bot.guilds)}** servers\n**prefix:** `{ctx.prefix}`"
         kwargs = {"text": f"server: {str(ctx.guild.name)}"}
+        embed.set_thumbnail(url = ctx.author.display_avatar.url)
         if ctx.guild.icon:
             kwargs["icon_url"] = ctx.guild.icon.url
+        else:
+            kwargs["icon_url"] = "https://cdn.discordapp.com/icons/1256170606286868551/.png"
         embed.set_footer(**kwargs)
-        view.add_item(Button(label = "invite", url = utils.oauth_url(self.bot.user.id, permissions = Permissions(8), scopes = ["bot"])))
-        view.add_item(Button(label = "socials", url = "https://rival.rocks/"))
+        view.add_item(Button(label = "invite", emoji = "🔗", url = utils.oauth_url(self.bot.user.id, permissions = Permissions(8), scopes = ["bot"])))
+        view.add_item(Button(label = "socials", emoji = "🔗", url = "https://rival.rocks/"))
         cogs = sorted(
             (
                 cog for cog in self.bot.cogs.values()
@@ -89,7 +92,7 @@ class Information(Cog):
                     name=f"{str(ctx.author)}", 
                     icon_url=ctx.author.display_avatar
                 )
-                .set_footer(text=f"server: {ctx.guild.name}")
+                .set_footer(text=f"server: {ctx.guild.name}", icon_url = ctx.guild.icon.url if ctx.guild.icon else "https://cdn.discordapp.com/icons/1256170606286868551/.png")
             )
             for cog in cogs
         })

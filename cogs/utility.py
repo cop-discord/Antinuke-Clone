@@ -14,9 +14,9 @@ class utility(Cog):
                 user = ctx.message.mentions[0]
             else:
                 user = await self.bot.fetch_user(ctx.message.content.split()[-1])
-        mutual_guilds = [guild for guild in self.bot.guilds if guild.get_member(user.id)]
+        mutual_guilds = user.mutual_guilds
         embed = Embed(color=self.bot.color)
-        embed.set_thumbnail(url=user.avatar.url)
+        embed.set_thumbnail(url=user.display_avatar.url)
         embed.add_field(name="Joined Discord", value=f"<t:{int(user.created_at.timestamp())}:f>", inline=False)
         if isinstance(user, Member):
             embed.title = f"{user.display_name} @{user.name}"

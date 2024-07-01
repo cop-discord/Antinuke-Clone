@@ -1,13 +1,13 @@
-from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401
+from discord.ext.commands import Bot, Context, CommandError, MissingPermissions, when_mentioned_or  # noqa: F401 # type: ignore # type: ignore
 from discord import Embed, Message, Guild, Intents, User
 import config
 from discord.ext import commands
-import traceback, asyncio, discord
+import traceback, asyncio, discord # type: ignore
 from pathlib import Path
 from loguru import logger
 from sys import stdout
 from typing import Optional
-from tools import ratelimit, lock  # noqa: F401
+from tools import ratelimit, lock # type: ignore # type: ignore
 from backend.database import Database
 from backend.browser import Session
 import os
@@ -152,7 +152,7 @@ class Antinuke(Bot):
 
 
     async def on_command_error(self: "Antinuke", ctx: Context, error: Exception):
-        if isinstance(error, commands.NoCommandFound):
+        if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.MissingRequiredArgument):
             return await self.send_error(ctx, f"Please include a **{error.param.name.title()}**")
