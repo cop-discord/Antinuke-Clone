@@ -1,12 +1,13 @@
-from discord import Embed
+from discord import Embed, Message
+from backend import SELF, BOT
 from discord.ext.commands import Cog
 
 class listeners(Cog):
-    def __init__(self, bot):
+    def __init__(self: SELF, bot: BOT):
         self.bot = bot
 
     @Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self: SELF, message: Message):
         if message.author.bot:
             return
         away = await self.bot.db.fetchval("SELECT reason FROM afk WHERE user_id = $1", message.author.id)
