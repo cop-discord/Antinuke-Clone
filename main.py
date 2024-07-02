@@ -4,7 +4,7 @@ import config
 from discord.ext import commands
 import traceback, asyncio, discord # type: ignore
 from pathlib import Path
-from loguru import logger
+from loguru import logger # type: ignore
 from sys import stdout
 from typing import Optional
 from tools import ratelimit, lock # type: ignore # type: ignore
